@@ -39,14 +39,14 @@ pub fn run() -> Result<()> {
     let mut terminal = Terminal::new(backend)?;
 
     setup_tui(&mut terminal)?;
-
+    terminal.draw(|f| ui::<TuiBackend>(f, &game_state))?;
     while game_state.is_running {
-        // 1. Малювання
-        terminal.draw(|f| ui::<TuiBackend>(f, &game_state))?;
+    
         
         // 2. Обробка подій та оновлення стану
         if let Some(action) = handle_events(&game_state)? {
             game_state.apply_action(action);
+            terminal.draw(|f| ui::<TuiBackend>(f, &game_state))?;
         }
     }
 

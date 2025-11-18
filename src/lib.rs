@@ -1,7 +1,7 @@
 // src/lib.rs
 
 pub mod map;
-pub mod entities;
+pub mod specials;
 pub mod state;
 pub mod tui;
 
