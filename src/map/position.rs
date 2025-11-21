@@ -56,6 +56,21 @@ impl MapPosition {
             None
         }
     }
+
+    pub fn manhattan_distance(&self, other: &Self) -> u32 {
+        let dx = (self.0.x - other.0.x).abs();
+        let dy = (self.0.y - other.0.y).abs();
+        (dx + dy) as u32
+    }
+    
+    pub fn neighbors(&self) -> [Self; 4] {
+        [
+            self.up(1),
+            self.down(1),
+            self.left(1),
+            self.right(1),
+        ]
+    }
 }
 
 // Реалізація трейтів для зручності:

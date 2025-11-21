@@ -1,4 +1,4 @@
-// src/map/map.rs (ОЧИЩЕНА ВЕРСІЯ
+// src/map/map.rs
 
 use serde::{Serialize, Deserialize};
 
@@ -7,9 +7,9 @@ use super::position::MapPosition;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Map {
-    pub width: i32, 
-    pub height: i32,
-    pub tiles: Vec<Tile>, 
+    width: i32, 
+    height: i32,
+    tiles: Vec<Tile>,
 }
 
 impl Map {
@@ -22,21 +22,9 @@ impl Map {
         Map { width, height, tiles }
     }
     
-    // --- Приватні Методи ---
-    
-    /// Приватна функція: Перетворення 2D-координат (MapPosition) на 1D-індекс.
-    // fn get_index(&self, pos: &MapPosition) -> Option<usize> {
-    //     let x = pos.x();
-    //     let y = pos.y();
-        
-    //     if x >= 0 && x < self.width && y >= 0 && y < self.height {
-    //         // Формула: index = y * width + x
-    //         let index = (y * self.width + x) as usize;
-    //         Some(index)
-    //     } else {
-    //         None 
-    //     }
-    // }
+    // =========================================================================
+    //                            PRIVATE METHODS (Unchanged)
+    // =========================================================================
 
     /// Приватна функція: Перетворення 2D-координат (i32) на 1D-індекс.
     fn get_index_i32(&self, x: i32, y: i32) -> Option<usize> {
@@ -49,7 +37,19 @@ impl Map {
         }
     }
 
-    // --- Публічні Геттери ---
+    // =========================================================================
+    //                            READ-ONLY ACCESSORS (Getters)
+    // =========================================================================
+
+    /// Повертає ширину карти.
+    pub fn width(&self) -> i32 {
+        self.width
+    }
+    
+    /// Повертає висоту карти.
+    pub fn height(&self) -> i32 {
+        self.height
+    }
 
     /// Отримує незмінну клітинку (Tile) за MapPosition.
     pub fn get_tile(&self, pos: &MapPosition) -> Option<&Tile> {
@@ -61,7 +61,7 @@ impl Map {
         self.get_tile_mut_i32(pos.x(), pos.y())
     }
     
-    /// Отримує незмінну клітинку за прямими i32 координатами (Zero-Cost Abstraction).
+    /// Отримує незмінну клітинку за прямими i32 координатами.
     pub fn get_tile_i32(&self, x: i32, y: i32) -> Option<&Tile> {
         match self.get_index_i32(x, y) {
             Some(index) => self.tiles.get(index),
@@ -69,7 +69,7 @@ impl Map {
         }
     }
 
-    /// Отримує змінну клітинку за прямими i32 координатами (Zero-Cost Abstraction).
+    /// Отримує змінну клітинку за прямими i32 координатами.
     pub fn get_tile_mut_i32(&mut self, x: i32, y: i32) -> Option<&mut Tile> {
         match self.get_index_i32(x, y) {
             Some(index) => self.tiles.get_mut(index),
@@ -78,7 +78,9 @@ impl Map {
     }
 
 
-    // --- Логіка Взаємодії ---
+    // =========================================================================
+    //                            LOGIC METHODS (Unchanged)
+    // =========================================================================
 
     /// Перевіряє, чи можна ходити на клітинку (без перешкод сутностями).
     pub fn is_walkable(&self, pos: &MapPosition) -> bool {

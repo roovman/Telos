@@ -25,8 +25,7 @@ impl ApplicationState {
                     match sel {
                         MenuSelection::EnterBuildMode => self.state = AppState::Editor(EditorMode::new()),
                         MenuSelection::EnterPlayMode => {
-                            let mut gs = GameState::new();
-                            gs.spawn_entity(crate::map::position::MapPosition::new(10,10), '@', 100);
+                            let gs = GameState::new();
                             self.state = AppState::Simulation(GameMode::new(gs));
                         },
                         MenuSelection::LoadLatest => {
@@ -34,8 +33,7 @@ impl ApplicationState {
                                 Ok(gs) => self.state = AppState::Simulation(GameMode::new(gs)),
                                 Err(_) => { /* TODO: Handle error UI */ }
                             }
-                        },
-                        _ => {}
+                        }
                     }
                 } else if let Action::QuitApp = action {
                     self.state = AppState::Exiting;

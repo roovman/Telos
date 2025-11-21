@@ -1,3 +1,5 @@
+// src/tui/draw.rs
+
 use ratatui::{
     Frame, 
     widgets::{Paragraph, Block, Borders},
@@ -11,19 +13,22 @@ use crate::map::tile::TileType;
 
 // --- HELPERS ---
 fn draw_map_tiles(f: &mut Frame, game_state: &GameState, inner_area: Rect) {
-    for y in 0..game_state.map.height {
-        for x in 0..game_state.map.width {
+    // --- FIX: Use map.height() and map.width() getters ---
+    for y in 0..game_state.map.height() {
+        for x in 0..game_state.map.width() {
             let tile = game_state.map.get_tile_i32(x, y);
             if let Some(tile) = tile {
-                let (mut symbol, mut style) = match tile.tile_type {
-                    TileType::WalkableGeneric => (tile.symbol, Style::default().fg(Color::DarkGray)),
-                    TileType::Wall => (tile.symbol, Style::default().fg(Color::Rgb(255, 165, 0))),
+                
+                // Fixes from previous step are preserved:
+                let (mut symbol, mut style) = match tile.tile_type() { 
+                    TileType::WalkableGeneric => (tile.symbol(), Style::default().fg(Color::DarkGray)),
+                    TileType::Wall => (tile.symbol(), Style::default().fg(Color::Rgb(255, 165, 0))),
                 };
 
-                if let Some(id) = tile.entity_id {
+                if let Some(id) = tile.entity_id() { 
                     if let Some(e) = game_state.get_entity(id) {
-                        symbol = e.symbol;
-                        if e.is_selected {
+                        symbol = e.symbol();
+                        if e.is_selected() { 
                             style = Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD);
                         } else {
                             style = Style::default().fg(Color::White);

@@ -37,16 +37,44 @@ impl GameState {
 
     // --- Logic Helpers ---
 
-    pub fn spawn_entity(&mut self, pos: MapPosition, symbol: char, health: u32) -> Option<EntityID> {
+    pub fn spawn_entity(
+        &mut self, 
+        pos: MapPosition, 
+        symbol: char, 
+        name: String, 
+        max_health: u32, 
+        max_energy: u32, 
+        team: u32,       
+        is_ai: bool,     
+    ) -> Option<EntityID> {
+        
+        // 1. Check if the tile is standable
         if !self.map.is_standable(&pos) { return None; }
 
         let id = self.next_entity_id;
         self.next_entity_id += 1;
 
-        self.entities.push(Entity::new(id, pos, symbol));
+        // 2. Use the new Entity::new constructor (already correct)
+        let mut new_entity = Entity::new(
+            id, 
+            symbol, 
+            name, 
+            pos, 
+            team, 
+            max_health, 
+            max_energy
+        );
 
+        if is_ai {
+            new_entity.set_ai(true);
+        }
+
+        self.entities.push(new_entity);
+
+        // 3. Update the map tile
         if let Some(tile) = self.map.get_tile_mut(&pos) {
-            tile.entity_id = Some(id);
+            // FIX: Use set_entity_id mutator
+            tile.set_entity_id(Some(id));
         }
         Some(id)
     }
@@ -59,31 +87,39 @@ impl GameState {
     pub fn build_floor(&mut self, pos: MapPosition) {
         self.clear_pos(pos);
         if let Some(tile) = self.map.get_tile_mut(&pos) {
-            *tile = crate::map::tile::Tile::new_walkable();
+            tile.set_type(crate::map::tile::TileType::WalkableGeneric);
         }
     }
 
     fn clear_pos(&mut self, pos: MapPosition) {
-        if let Some(tile) = self.map.get_tile(&pos) {
-            if let Some(id) = tile.entity_id {
-                self.entities.retain(|e| e.id != id);
-            }
+    if let Some(tile) = self.map.get_tile(&pos) {
+        // FIX: Use tile.entity_id() accessor
+        if let Some(id_to_clear) = tile.entity_id() { 
+            // CRITICAL FIX: The logic must REMOVE the entity with the matching ID.
+            // If the closure returns TRUE, the element is KEPT.
+            // We want to KEEP entities whose IDs are NOT the ID_TO_CLEAR.
+            self.entities.retain(|e| e.id() != id_to_clear); // Use e.id() accessor
         }
-        if let Some(tile) = self.map.get_tile_mut(&pos) {
-            tile.entity_id = None;
-            tile.powerup = PowerupType::None;
-        }
     }
+    if let Some(tile) = self.map.get_tile_mut(&pos) {
+        // Correct, uses Tile mutators
+        tile.set_entity_id(None);
+        tile.set_powerup(PowerupType::None);
+    }
+}
 
-    pub fn get_entity(&self, id: EntityID) -> Option<&Entity> {
-        self.entities.iter().find(|e| e.id == id)
-    }
-    
-    pub fn get_entity_mut(&mut self, id: EntityID) -> Option<&mut Entity> {
-        self.entities.iter_mut().find(|e| e.id == id)
-    }
+pub fn get_entity(&self, id: EntityID) -> Option<&Entity> {
+    // FIX: Use e.id() accessor
+    self.entities.iter().find(|e| e.id() == id)
+}
 
-    pub fn get_entity_id_at(&self, pos: MapPosition) -> Option<EntityID> {
-        self.map.get_tile(&pos).and_then(|t| t.entity_id)
-    }
+pub fn get_entity_mut(&mut self, id: EntityID) -> Option<&mut Entity> {
+    // FIX: Use e.id() accessor
+    self.entities.iter_mut().find(|e| e.id() == id)
+}
+
+pub fn get_entity_id_at(&self, pos: MapPosition) -> Option<EntityID> {
+    // Correct, uses tile.entity_id() accessor
+    self.map.get_tile(&pos).and_then(|t| t.entity_id()) 
+}
 }
