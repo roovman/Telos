@@ -5,15 +5,15 @@ use std::fs::File;
 use std::io::{BufReader, BufWriter};
 
 #[derive(Serialize, Deserialize)]
-pub struct GameState {
+pub struct WorldState {
     pub map: Map, 
     pub entities: Vec<Entity>, 
     pub next_entity_id: EntityID,
 }
 
-impl GameState {
+impl WorldState {
     pub fn new() -> Self {
-        GameState {
+        WorldState {
             map: Map::new(100, 25),
             entities: Vec::new(),
             next_entity_id: 0,

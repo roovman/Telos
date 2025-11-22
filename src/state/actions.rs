@@ -7,6 +7,11 @@ pub enum BuildTool {
     Unit, 
 }
 
+// --- NEW ACTION COSTS (Placeholder until we need them) ---
+// pub const COST_WALK: u32 = 1;
+// pub const COST_ATTACK: u32 = 2;
+// --------------------------------------------------------
+
 #[derive(Debug, Clone)]
 pub enum Action {
     // --- Global ---
@@ -18,11 +23,14 @@ pub enum Action {
 
     // --- Editor Mode ---
     CycleBuildTool,
-    EditorClick { pos: MapPosition },
+    EditorClick { pos: MapPosition }, 
     SaveMap,
 
-    // --- Game Mode ---
-    GameClick { pos: MapPosition },
+    EditorMenuClick { screen_x: i32, screen_y: i32 }, 
+    GameMenuClick { screen_x: i32, screen_y: i32 },
+
+    GameClick { pos: MapPosition }, 
+    
 }
 
 #[derive(Debug, Clone)]
