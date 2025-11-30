@@ -1,6 +1,6 @@
-# Entropia-Core 🦀
+# Telos 🦀
 
-**Entropia-Core** is a high-performance, modular simulation engine and roguelike platform written in Rust.
+**** Telos is a high-performance, modular simulation engine written in Rust.
 
 Designed with a focus on **Data-Oriented Design** and strict architectural boundaries, this project serves two purposes: a functional game engine with a TUI (Terminal User Interface) and a headless environment for training Reinforcement Learning (RL) agents.
 
@@ -40,8 +40,8 @@ Ensure you have the **Rust Toolchain** installed.
 
 ```bash
 # Clone the repository
-git clone [https://github.com/roovman/Game.git](https://github.com/roovman/Game.git)
-cd Game
+git clone [https://github.com/roovman/Telos.git](https://github.com/roovman/Telos.git)
+cd Telos
 
 # Run in Release mode 
 cargo run --release
@@ -71,5 +71,9 @@ The engine is built to support a custom Gym environment for RL experiments:
 * **Reward Function:** Customizable scoring based on survival time and enemies defeated.
 * **Parallel Training:** Utilizing Rust's async capabilities to run batched simulations for rapid agent convergence.
 
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](LICENSE).
+Feel free to use, modify, and distribute this code for educational or research purposes.
 ---
 *Developed by Roman, Kyiv Polytechnic Institute.*
